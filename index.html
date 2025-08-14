@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Matter of Time | Laufey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Georgia&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f8f4e9;
+            color: #1a1a2e;
+            transition: all 0.3s ease;
+        }
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        /*.bg-vintage {
+            background-image: url("");
+        }*/
+        .star {
+            position: absolute;
+            background-color: #d4af37;
+            border-radius: 50%;
+            animation: twinkle 5s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+        .album-cover {
+            box-shadow: 0 25px 50px -12px rgba(26, 26, 46, 0.25);
+            transition: transform 0.5s ease;
+        }
+        .album-cover:hover {
+            transform: rotate(5deg) scale(1.03);
+        }
+        .track-card {
+            transition: all 0.3s ease;
+        }
+        .track-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(26, 26, 46, 0.1);
+        }
+        .high-contrast {
+            background-color: #000 !important;
+            color: goldenrod !important;
+        }
+        .high-contrast .text-midnight {
+            color: #00eeff !important;
+        }
+        .large-text {
+            font-size: 1.25rem !important;
+        }
+        .reduce-motion * {
+            animation: none !important;
+            transition: none !important;
+        }
+        .accessibility-menu {
+            transform: scale(0);
+            transform-origin: top right;
+            transition: transform 0.3s ease;
+        }
+        .accessibility-menu.open {
+            transform: scale(1);
+        }
+        .floral-divider {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M1200,0V120H0V0C298.57,0,298.57,120,600,120S1200,0,1200,0Z" fill="%23d4af37" opacity="0.2"></path></svg>');
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 30px;
+        }
+        .musicas ol{
+            list-style: none;
+            padding-left: 0;
+        }
+        .musicas li{
+            margin: 1rem 0;
+            padding: 0.5rem 0;
+            border-left: 3px solid #d4b8a3;
+            background-color: #fff0d9;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        .musicas li:hover{
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(26, 26, 46, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-vintage min-h-screen">
+    <!-- Accessibility Button -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="accessibilityBtn" class="w-12 h-12 rounded-full bg-cream border-2 border-gold flex items-center justify-center shadow-lg hover:bg-midnight hover:text-cream transition-colors">
+            <i class="fas fa-clock text-xl"></i>
+        </button>
+        <div id="accessibilityMenu" class="accessibility-menu absolute right-0 mt-2 w-64 bg-cream rounded-lg shadow-xl p-4 border border-gold">
+            <h3 class="playfair font-bold text-midnight mb-2">Acessibilidade</h3>
+            <button class="accessibility-option w-full text-left py-2 px-3 hover:bg-gold/10 rounded flex items-center">
+                <i class="fas fa-adjust mr-2"></i> Alto Contraste
+            </button>
+            <button class="accessibility-option w-full text-left py-2 px-3 hover:bg-gold/10 rounded flex items-center">
+                <i class="fas fa-text-height mr-2"></i> Aumentar Fonte
+            </button>
+        </div>
+    </div>
+
+    <!-- Stars Background -->
+    <div id="starsContainer" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-cream/80 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="playfair text-2xl font-bold text-midnight hover:text-gold transition-colors">A Matter of Time</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="text-midnight hover:text-gold transition-colors">Início</a>
+                    <a href="#about" class="text-midnight hover:text-gold transition-colors">Sobre</a>
+                    <a href="#album" class="text-midnight hover:text-gold transition-colors">Álbum</a>
+                    <a href="#lyrics" class="text-midnight hover:text-gold transition-colors">Letras</a>
+                    <a href="#tracklist" class="text-midnight hover:text-gold transition-colors">Tracklist</a>
+                </div>
+                <button class="md:hidden text-midnight">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 px-6">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div class="md:w-1/2 mb-12 md:mb-0">
+                <h1 class="playfair text-4xl md:text-5xl lg:text-6xl font-bold text-midnight mb-6 leading-tight">
+                    <span class="text-gold">A Matter of Time</span><br>by Laufey.
+                </h1>
+                <div class="bg-cream/70 p-6 rounded-lg shadow-inner max-w-md">
+                    <h2 class="playfair text-xl font-semibold text-midnight mb-2">Lançamento em:</h2>
+                    <div id="countdown" class="flex justify-between text-center">
+                        <div class="countdown-item">
+                            <div class="text-3xl font-bold text-gold">00</div>
+                            <div class="text-sm text-midnight">Dias</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="text-3xl font-bold text-gold">00</div>
+                            <div class="text-sm text-midnight">Horas</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="text-3xl font-bold text-gold">00</div>
+                            <div class="text-sm text-midnight">Minutos</div>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="text-3xl font-bold text-gold">00</div>
+                            <div class="text-sm text-midnight">Segundos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="album-cover w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-br from-midnight to-gold rounded-lg overflow-hidden shadow-2xl relative">
+                    <img src="img/albumcover.jpg" alt="Capa do álbum">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-cream text-center p-6">
+                            <h2 class="playfair text-3xl md:text-4xl font-bold mb-2"></h2>
+                            <p class="text-xl"></p>
+                            <p class="mt-4 text-sm"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floral Divider -->
+    <div class="floral-divider w-full"></div>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 bg-cream/30">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="playfair text-3xl md:text-4xl font-bold text-center text-midnight mb-12">Sobre Laufey</h2>
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-1/3">
+                    <div class="rounded-full overflow-hidden border-4 border-gold/30 w-48 h-48 mx-auto">
+                        <img src="https://static.voguescandinavia.com/G_Fiuf_Ja_XUA_At_N_Zs_c9c896cf6a/G_Fiuf_Ja_XUA_At_N_Zs_c9c896cf6a.jpeg" alt="Laufey grammy" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="md:w-2/3">
+                    <p class="text-midnight mb-4">
+                        Laufey (pronunciado "lāy-vāy") é uma cantora, compositora e multi-instrumentista islandesa-chinesa cuja música combina jazz clássico com sensibilidade contemporânea.
+                    </p>
+                    <p class="text-midnight mb-4">
+                        Nascida em Reykjavík e criada entre a Islândia e os Estados Unidos, sua arte é uma ponte entre culturas e eras, criando um som que é ao mesmo tempo nostálgico e fresco.
+                    </p>
+                    <p class="text-midnight">
+                        "A Matter of Time" é seu terceiro álbum de estúdio, uma exploração poética da temporalidade, do amor e da transitoriedade da vida, encapsulada em arranjos ricos e letras profundamente pessoais.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Album Section -->
+    <section id="album" class="py-20 px-6 bg-midnight text-cream">
+        <div class="container mx-auto">
+            <h2 class="playfair text-3xl md:text-4xl font-bold text-center mb-12">Álbum Interativo</h2>
+            <p class="text-center max-w-2xl mx-auto mb-12">
+                Navegue pelas faixas do novo album!
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Track 1 -->
+                <div class="track-card bg-cream/10 rounded-lg overflow-hidden border border-gold/20 hover:border-gold/50 p-6">
+                    <div class="flex items-center mb-4">
+                        <span class="text-gold mr-3">01</span>
+                        <h3 class="playfair text-xl font-semibold">Silver Lining</h3>
+                    </div>
+                    <div>
+                    <a href="https://www.youtube.com/watch?v=wbzJB36Z1F4" target="_blank">
+                        <img src="img/silver-lining.jpg" alt="assista no youtube" style="width: 686px; height: auto;">
+                    </a>
+                    </div>
+
+                    <p class="text-cream/80 italic mb-4">"And when we're punished for being so cruel<br>The silver lining's I'll be there with you..."</p>
+                    
+                </div>
+                
+                <!-- Track 2 -->
+                <div class="track-card bg-cream/10 rounded-lg overflow-hidden border border-gold/20 hover:border-gold/50 p-6">
+                    <div class="flex items-center mb-4">
+                        <span class="text-gold mr-3">02</span>
+                        <h3 class="playfair text-xl font-semibold">Tough Luck</h3>
+                    </div>
+                    <div>
+                       <a href="https://www.youtube.com/watch?v=9q71ywEqJjA" target="_blank">
+                        <img src="img/tough-luck.png" alt="assista no youtube" style="width: 686px; height: auto;">
+                    </a>
+                        
+                    </div>
+                    <p class="text-cream/80 italic mb-4">"You won't be missed, I'm glad to see you go..."</p>
+                </div>
+                
+                <!-- Track 3 -->
+                <div class="track-card bg-cream/10 rounded-lg overflow-hidden border border-gold/20 hover:border-gold/50 p-6">
+                    <div class="flex items-center mb-4">
+                        <span class="text-gold mr-3">03</span>
+                        <h3 class="playfair text-xl font-semibold">Lover Girl</h3>
+                    </div>
+                    
+                    <div>
+                        <a href="https://www.youtube.com/watch?v=obLSGG-oEyw" target="_blank">
+                        <img src="img/lover-girl.png" alt="assista no youtube" style="width: 686px; height: auto;">
+                    </a>
+                    </div>
+                    <p class="text-cream/80 italic mb-4">"I'm in a reckless fever<br>Love-struck girl, I'd tease her<br>Thought I'd never be her..."</p>
+                </div>
+                
+                <!-- Track 4 -->
+                <div class="track-card bg-cream/10 rounded-lg overflow-hidden border border-gold/20 hover:border-gold/50 p-6">
+                    <div class="flex items-center mb-4">
+                        <span class="text-gold mr-3">04</span>
+                        <h3 class="playfair text-xl font-semibold">Snow White</h3>
+                    </div>
+                    <div>
+                        <a href="https://www.youtube.com/watch?v=LeG3jPeeMec" target="_blank">
+                        <img src="img/snow-white.png" alt="assista no youtube" style="width: 686px; height: auto;">
+                    </a>
+                    </div>
+                    <p class="text-cream/80 italic mb-4">"I don't think I'm pretty, it's not up for debate<br>A woman's best currency's her body, not her brain..."</p>
+                </div>
+                
+                <!-- Track 5 -->
+                
+                <!-- Track 6 -->
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Lyrics Section -->
+    <section id="lyrics" class="py-20 px-6">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="playfair text-3xl md:text-4xl font-bold text-center text-midnight mb-12">Letras</h2>
+            
+            <div class="mb-12">
+                <h3 class="playfair text-2xl font-semibold text-gold mb-4">Tough Luck</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold text-midnight mb-2">Original (Inglês)</h4>
+                        <div >
+                            <p class="mb-4">Are you tired? I can tell that you're tired<br>Your eyes turn gray, you beg me to be silent<br>
+                            You said I can't read your mind<br>But I'm reading it just fine<br>
+                            You think you're so misunderstood<br>The black cat of your neighborhood<br>
+                            <p class="mb-4">Tough luck, my boy, your time is up<br>
+                            I'll break it first, I've had enough<br>
+                            Of waiting 'til you lie and cheat<br>
+                            Just like you did to the actress before me<br>
+                            Oops, she doesn't even know<br>
+                            You won't be missed, I'm glad to see you go<br>
+                            Tough luck, tough luck</p>
+
+                            <p class="mb-4">Since we're spilling secrets<br>
+                            Does your mother even know? (Mother even know)<br>
+                            You demoralized, effaced me just to feed your frail ego (oh)<br>
+                            When you're screaming at the TV<br>
+                            Cussing out opposing football teams<br>
+                            You said I'd never understand the things that make a man a man</p>
+                            <p class="mb-4">Tough luck, my boy, your time is up<br>
+                            I'll break it first, I've had enough<br>
+                            Of waiting 'til you lie and cheat<br>
+                            Just like you did to the actress before me<br>
+                            Oops, she doesn't even know<br>
+                            You won't be missed, I'm glad to see you</p>
+                            <p>I should congratulate thee for so nearly convincing me<br>
+                            I'm not quite as smart as I seem<br>
+                            That I'm a loudmouthed nobody<br>
+                            My accent and music are dumb<br>
+                            Your tattoos are no better, hun<br>
+                            The proof says you're tragic as fuck<br>
+                            The truth is that's just tough, tough luck (tough luck)</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-midnight mb-2">Tradução (Português)</h4>
+                        <div >
+                            <p class="mb-4">Você está cansado? Posso dizer que sim<br>
+                            Seus olhos ficam cinzas, você implora para eu ficar quieta<br>
+                            Você disse que não posso ler sua mente<br>
+                            Mas eu estou lendo facilmente<br>
+                            Você se acha tão incompreendido<br>
+                            O gato preto da vizinhança</p>
+                            <p class="mb-4">Azar o seu, garoto, seu tempo acabou<br>
+                            Vou terminar primeiro, já aguentei o suficiente<br>
+                            De esperar você mentir e trair<br>
+                            Como fez com a atriz antes de mim<br>
+                            Opa, ela nem faz ideia<br>
+                            Você não fará falta, é um prazer te ver ir<br>
+                            Azar o seu, azar o seu</p>
+                            <p class="mb-4">Já que estamos falando segredos<br>
+                            Sua mãe sequer sabe? (Sua mãe sequer sabe)<br>
+                            Que você me desmoralizou, me desfigurou<br>
+                            Só para alimentar seu ego frágil (oh)<br>
+                            Quando você está gritando para a televisão<br>
+                            Xingando o time adversário<br>
+                            Você disse que eu nunca entenderia<br>
+                            As coisas que fazem um homem um homem</p>
+                            <p class="mb-4">Azar o seu, garoto, seu tempo acabou<br>
+                            Vou terminar primeiro, já aguentei o suficiente<br>
+                            De esperar você mentir e trair<br>
+                            Como fez com a atriz antes de mim<br>
+                            Opa, ela nem faz ideia<br>
+                            Você não fará falta, é um prazer te ver</p>
+                            <p>Eu devo te parabenizar<br>
+                            Por quase me convencer<br>
+                            Que não sou tão inteligente quanto pareço<br>
+                            Que sou uma falastrona insignificante<br>
+                            Que meu sotaque e música são bobos<br>
+                            Suas tatuagens não são melhores, amor<br>
+                            A prova diz que você é trágico demais<br>
+                            A verdade é que isso é só azar, azar o seu (azar, azar o seu)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 /70 p-4 rounded-lg">
+                    <h4 class="font-bold text-midnight mb-2">Interpretação</h4>
+                    <p>Em “Tough Luck”, Laufey transforma o ressentimento de um término tóxico em uma afirmação de poder pessoal, marcada por ironia e sarcasmo. Em vez de se colocar como vítima, ela assume o controle da situação, deixando claro que não vai mais tolerar mentiras e traições.</p><br>
+                    <p><em>(fonte: https://www.letras.mus.br/laufey/tough-luck/significado.html)</em></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tracklist Section -->
+    <section id="tracklist" class="musicas">
+        <div class="container mx-auto max-w-2xl">
+            <h2 class="playfair text-3xl md:text-4xl font-bold text-center text-midnight mb-12">Tracklist</h2>
+            <ol>
+                <div class="lista">
+                    <li>I. Clockwork</li>
+                    <li>II. Lover Girl</li>
+                    <li>III. Snow White</li>
+                    <li>IV. Castle in Hollywood</li> 
+                    <li>V. Carousel</li> 
+                    <li>VI. Silver Lining</li> 
+                    <li>VII. Too Little, Too Late</li>
+                </div>
+                <div>
+                    <li>VIII. Cuckoo Ballet (Interlude)</li>
+                    <li>IX. Forget-Me-Not</li>
+                    <li>X. Tough Luck</li>
+                    <li>XI. A Cautionary Tale</li> 
+                    <li>XII. Mr. Eclectic</li> 
+                    <li>XIII. Clean Air</li>
+                    <li>XIV. Sabotage</li>
+                </div>
+            </ol>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-midnight text-cream py-12 px-6">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="playfair text-2xl font-bold mb-4">A Matter of Time</h2>
+                    <p class="max-w-md">Um álbum de Laufey. Uma jornada através do tempo, amor e memórias.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://open.spotify.com/artist/7gW0r5CkdEUMm42w9XpyZO" class="text-cream hover:text-gold text-2xl"><i class="fab fa-spotify"></i></a>
+                    
+                    <a href="https://www.instagram.com/laufey/" class="text-cream hover:text-gold text-2xl"><i class="fab fa-instagram"></i></a>
+                    
+                </div>
+            </div>
+            <div class="border-t border-gold/20 mt-8 pt-8 text-center">
+                <p>&copy; 2025 Laufey. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        midnight: '#1a1a2e',
+                        gold: '#d4af37',
+                        cream: '#f8f4e9',
+                    },
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        georgia: ['Georgia', 'serif'],
+                    },
+                }
+            }
+        }
+
+        // Create stars
+        document.addEventListener('DOMContentLoaded', function() {
+            const starsContainer = document.getElementById('starsContainer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random size between 1 and 3px
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+
+            // Accessibility menu toggle
+            const accessibilityBtn = document.getElementById('accessibilityBtn');
+            const accessibilityMenu = document.getElementById('accessibilityMenu');
+            
+            accessibilityBtn.addEventListener('click', function() {
+                accessibilityMenu.classList.toggle('open');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!accessibilityBtn.contains(event.target) && !accessibilityMenu.contains(event.target)) {
+                    accessibilityMenu.classList.remove('open');
+                }
+            });
+
+            // Accessibility options
+            const options = document.querySelectorAll('.accessibility-option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const text = this.textContent.trim();
+                    
+                    if (text.includes('Alto Contraste')) {
+                        document.body.classList.toggle('high-contrast');
+                    } else if (text.includes('Aumentar Fonte')) {
+                        document.body.classList.toggle('large-text');
+                    } else if (text.includes('Reduzir Movimento')) {
+                        document.body.classList.toggle('reduce-motion');
+                    } else if (text.includes('Narração de Texto')) {
+                        alert('Narração de texto ativada. O conteúdo da página será lido em voz alta.');
+                        // In a real implementation, you would integrate with a screen reader API
+                    }
+                    
+                    accessibilityMenu.classList.remove('open');
+                });
+            });
+
+            // Countdown timer
+            function updateCountdown() {
+                const releaseDate = new Date('August 22, 2025 00:00:00').getTime();
+                const now = new Date().getTime();
+                const distance = releaseDate - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.querySelectorAll('.countdown-item')[0].querySelector('div:first-child').textContent = days.toString().padStart(2, '0');
+                document.querySelectorAll('.countdown-item')[1].querySelector('div:first-child').textContent = hours.toString().padStart(2, '0');
+                document.querySelectorAll('.countdown-item')[2].querySelector('div:first-child').textContent = minutes.toString().padStart(2, '0');
+                document.querySelectorAll('.countdown-item')[3].querySelector('div:first-child').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
